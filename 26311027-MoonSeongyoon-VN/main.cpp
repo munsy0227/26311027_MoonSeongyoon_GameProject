@@ -81,8 +81,12 @@ int Render()
 	//return 0;
 
 
-	g2_Draw2D(nTx, {}, {});
-	g2_Draw2D(nTx2, {}, {});
+	VEC2 pos1(0, 0);
+	VEC2 pos2(0, 200);
+
+
+	g2_Draw2D(nTx, {}, &pos1);
+	g2_Draw2D(nTx2, {}, &pos2);
 
 	return 0;
 }
