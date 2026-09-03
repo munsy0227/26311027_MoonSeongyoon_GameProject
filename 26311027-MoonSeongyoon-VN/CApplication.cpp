@@ -2,6 +2,8 @@
 #include <glc2d.h>
 #include <cstdio>
 
+extern CApplication g_app;
+
 int CApplication::Init()
 {
     printf("Init.......................\n\n");
@@ -11,6 +13,7 @@ int CApplication::Init()
 
 int CApplication::CreateGameWindow()
 {
+    printf("CreateGameWindow.......................\n\n");
     return g2_CreateWin(
         m_winPos.x,
         m_winPos.y,
