@@ -1,4 +1,7 @@
+// include the 2d game header file
 #include <glc2d.h>
+#include <stdio.h>
+
 
 // link the 2d game library
 #if defined(_DEBUG)
@@ -16,71 +19,12 @@
 #endif
 
 
-// include the 2d game header file
-#include "glc2d.h"
-#include <stdio.h>
-
 int		nTx;					// 이미지 인덱스
 int		nTx2;
-
-//VEC2	g_vcVcl(1, 0);			// Object Velocity
-//VEC2	g_vcPos(400, 200);		// Object Position
-//
-//FLOAT	g_fSpeed = 4;			// Object Speed
-//FLOAT	g_fRadius = 0;			// Radius
-//FLOAT	g_dRadius = 0.1F;		// Delta Radius
-//FLOAT	g_dDir = 1.0F;		// Right or left rotation direction
-
-
-//struct GameMain
-//{
-//	int Init();
-//	int Destroy();
-//	int Update();
-//	int Render();
-//};
-//
-//GameMain g_GameMain;
-//
-//int Update()
-//{
-//	if (0 > g_GameMain.Update())
-//	{
-//		return -1;
-//	}
-//	return 0;
-//}
 
 
 int Render()
 {
-	//// test....
-	//Sleep(40);
-
-
-	//FLOAT fAngle = acosf(g_vcVcl.x);
-	//if (0 > g_vcVcl.y)
-	//	fAngle *= -1.F;
-
-	//FLOAT fCos = cosf(fAngle);
-	//FLOAT fSin = sinf(fAngle);
-	//VEC2  vDir = VEC2(-fSin, fCos) * g_dDir;
-
-	//g_vcVcl = g_fRadius * g_vcVcl + vDir;		// setup the the velocity
-	//D3DXVec2Normalize(&g_vcVcl, &g_vcVcl);		// Normalize the velocity
-
-	//g_vcPos += g_vcVcl * g_fSpeed;				// accumulate the position
-
-	//g_fRadius += g_dRadius;
-
-	//// Draw Object
-	//g2_DrawAlphaOption(1);
-	//g2_Draw2D(nTx, {}, &g_vcPos);
-	//g2_DrawAlphaOption(0);
-
-	//return 0;
-
-
 	VEC2 pos1(0, 0);
 	VEC2 pos2(0, 200);
 
