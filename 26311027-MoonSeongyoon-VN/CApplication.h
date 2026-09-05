@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <string>
 #include "ScenceGameBegin.h"
+#include "Player.h"
 
 class CApplication
 {
@@ -21,4 +22,5 @@ protected:
     std::string m_winName = "My Game Window";
 
     ScenceGameBegin m_sceneBegin;
+    Player m_player;
 };

@@ -16,6 +16,7 @@ int AppRender()
 
 int CApplication::Init()
 {
+    m_player.Init();
     InitSdk();
     m_sceneBegin.Init();
     return 0;

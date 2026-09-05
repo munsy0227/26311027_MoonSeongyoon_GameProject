@@ -29,13 +29,3 @@ int main()
 
     return 0;
 }
-
-
-class Player
-{
-	public:
-		int mp;
-		int hp;
-	private:
-		int attack;
-};

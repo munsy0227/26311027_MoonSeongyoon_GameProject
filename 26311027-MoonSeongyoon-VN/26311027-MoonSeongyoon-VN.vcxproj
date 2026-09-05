@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CApplication.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ScenceGameBegin.cpp" />
     <ClCompile Include="ScenceGamePlay.cpp" />
@@ -136,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CApplication.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="ScenceGameBegin.h" />
     <ClInclude Include="ScenceGamePlay.h" />
     <ClInclude Include="ScenceGameResult.h" />
