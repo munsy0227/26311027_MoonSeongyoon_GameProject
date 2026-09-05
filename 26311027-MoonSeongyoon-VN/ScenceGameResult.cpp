@@ -5,7 +5,7 @@ int ScenceGameResult::Init()
 	return 0;
 }
 
-int ScenceGameResult::Destory()
+int ScenceGameResult::Destroy()
 {
 	return 0;
 }

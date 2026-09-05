@@ -5,6 +5,6 @@ class ScenceGamePlay
 		int Init();
 		int Update();
 		int Render();
-		int Destory();
+		int Destroy();
 };
 

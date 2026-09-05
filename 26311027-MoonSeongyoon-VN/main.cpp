@@ -16,77 +16,18 @@
 
 // include the 2d game header file
 #include <glc2d.h>
-#include <stdio.h>
 #include "CApplication.h"
 
 
 CApplication g_app;
-int AppUpdate()
-{
-	return g_app.Update();
-}
-int AppRender()
-{
-	return g_app.Render();
-}
-
-
-int		nTx;					// 이미지 인덱스
-int		nTx2;
-int		nTx3;
-
-
-int Render()
-{
-	VEC2 pos1(0, 0);
-	VEC2 pos2(0, 200);
-	VEC2 pos3(300, 200);
-
-
-	g2_Draw2D(nTx, {}, &pos1);
-	g2_Draw2D(nTx2, {}, &pos2);
-	g2_Draw2D(nTx3, {}, &pos3);
-
-	return 0;
-}
-
 
 int main()
 {
-	//엔진을 초기화 한다.
-	g_app.Init();
-	//g2_InitSdk();
-	printf("그림 올리기.......................\n\n");
+    g_app.Init();
+    g2_Run();
+    g_app.Destroy();
 
-	//배경색을 바꾼다.
-	g2_SetClearColor(0xFF336699);
-
-	// 화면에 출력하기 위해서 함수를 연결한다.
-	g2_SetRender(Render);
-
-
-	// window 생성.
-	g_app.CreateGameWindow();
-
-
-	// 그림을 프로그램에 로딩
-	nTx = g2_TextureLoad("Texture/GameStart.png");
-	nTx2 = g2_TextureLoad("Texture/lena.png");
-	nTx3 = g2_TextureLoad("resource/character/mario.png");
-
-	// 실행
-	g2_Run();
-
-
-	// 텍스처 해제
-	g2_TextureRelease(nTx);
-	g2_TextureRelease(nTx2);
-
-	// 윈도우 해제
-	g_app.Destory();
-
-
-	return 0;
+    return 0;
 }
 
 
