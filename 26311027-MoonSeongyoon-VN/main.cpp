@@ -1,5 +1,3 @@
-#include <glc2d.h>
-
 // link the 2d game library
 #if defined(_DEBUG)
 #if defined(_M_X64) // 64-bit 아키텍처
@@ -17,111 +15,17 @@
 
 
 // include the 2d game header file
-#include "glc2d.h"
-#include <stdio.h>
-
-int		nTx;					// 이미지 인덱스
-int		nTx2;
-
-//VEC2	g_vcVcl(1, 0);			// Object Velocity
-//VEC2	g_vcPos(400, 200);		// Object Position
-//
-//FLOAT	g_fSpeed = 4;			// Object Speed
-//FLOAT	g_fRadius = 0;			// Radius
-//FLOAT	g_dRadius = 0.1F;		// Delta Radius
-//FLOAT	g_dDir = 1.0F;		// Right or left rotation direction
+#include <glc2d.h>
+#include "CApplication.h"
 
 
-//struct GameMain
-//{
-//	int Init();
-//	int Destroy();
-//	int Update();
-//	int Render();
-//};
-//
-//GameMain g_GameMain;
-//
-//int Update()
-//{
-//	if (0 > g_GameMain.Update())
-//	{
-//		return -1;
-//	}
-//	return 0;
-//}
-
-
-int Render()
-{
-	//// test....
-	//Sleep(40);
-
-
-	//FLOAT fAngle = acosf(g_vcVcl.x);
-	//if (0 > g_vcVcl.y)
-	//	fAngle *= -1.F;
-
-	//FLOAT fCos = cosf(fAngle);
-	//FLOAT fSin = sinf(fAngle);
-	//VEC2  vDir = VEC2(-fSin, fCos) * g_dDir;
-
-	//g_vcVcl = g_fRadius * g_vcVcl + vDir;		// setup the the velocity
-	//D3DXVec2Normalize(&g_vcVcl, &g_vcVcl);		// Normalize the velocity
-
-	//g_vcPos += g_vcVcl * g_fSpeed;				// accumulate the position
-
-	//g_fRadius += g_dRadius;
-
-	//// Draw Object
-	//g2_DrawAlphaOption(1);
-	//g2_Draw2D(nTx, {}, &g_vcPos);
-	//g2_DrawAlphaOption(0);
-
-	//return 0;
-
-
-	VEC2 pos1(0, 0);
-	VEC2 pos2(0, 200);
-
-
-	g2_Draw2D(nTx, {}, &pos1);
-	g2_Draw2D(nTx2, {}, &pos2);
-
-	return 0;
-}
-
+CApplication g_app;
 
 int main()
 {
-	//엔진을 초기화 한다.
-	g2_InitSdk();
-	printf("그림 올리기.......................\n\n");
+    g_app.Init();
+    g2_Run();
+    g_app.Destroy();
 
-	//배경색을 바꾼다.
-	g2_SetClearColor(0xFF336699);
-
-	// 화면에 출력하기 위해서 함수를 연결한다.
-	g2_SetRender(Render);
-
-	// window 생성.
-	g2_CreateWin(100, 100, 800, 600, "My First Game Window");
-
-
-	// 그림을 프로그램에 로딩
-	nTx = g2_TextureLoad("Texture/GameStart.png");
-	nTx2 = g2_TextureLoad("Texture/lena.png");
-
-	// 실행
-	g2_Run();
-
-
-	// 텍스처 해제
-	g2_TextureRelease(nTx);
-	g2_TextureRelease(nTx2);
-
-	// 윈도우 해제
-	g2_DestroyWin();
-
-	return 0;
+    return 0;
 }
