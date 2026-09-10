@@ -31,5 +31,10 @@ int ScenceGameBegin::Render()
     g2_Draw2D(m_txGameStart, {}, &pos1);
     g2_Draw2D(m_txLena, {}, &pos2);
     g2_Draw2D(m_txMario, {}, &pos3);
+
+    RECT rc{ 10, 10, 768, 768 };
+    g2_FontCreate("Arial", 32);
+    auto text = "æ»≥Á«œººø‰.";
+    g2_FontDrawText(-1, rc, 0, text);
     return 0;
 }
