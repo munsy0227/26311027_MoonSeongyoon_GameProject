@@ -7,6 +7,7 @@
 #include "GameUI.h"
 #undef private
 #include "ScenceGamePlay.h"
+void GameUI::PlaySelect() const {}
 std::vector<std::string> shown;
 int g2_TextureLoad(CSTR, DWORD) { return 1; }
 int g2_TextureRelease(int) { return 0; }

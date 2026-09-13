@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include=".clang-format" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CApplication.h">
@@ -55,7 +56,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameUI.cpp"><Filter>소스 파일</Filter></ClCompile>
-    <ClInclude Include="GameUI.h"><Filter>헤더 파일</Filter></ClInclude>
+    <ClCompile Include="GameUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClInclude Include="GameUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

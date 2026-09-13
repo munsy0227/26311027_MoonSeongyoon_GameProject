@@ -13,12 +13,10 @@
 #endif
 #endif
 
-
 // include the 2d game header file
-#include <glc2d.h>
 #include "CApplication.h"
 #include <filesystem>
-
+#include <glc2d.h>
 
 CApplication g_app;
 
@@ -27,7 +25,11 @@ int main()
     wchar_t executable[32768]{};
     GetModuleFileNameW(nullptr, executable, 32768);
     std::filesystem::current_path(std::filesystem::path(executable).parent_path());
-    if (g_app.Init() < 0) { g_app.Destroy(); return 1; }
+    if (g_app.Init() < 0)
+    {
+        g_app.Destroy();
+        return 1;
+    }
     g2_Run();
     g_app.Destroy();
 

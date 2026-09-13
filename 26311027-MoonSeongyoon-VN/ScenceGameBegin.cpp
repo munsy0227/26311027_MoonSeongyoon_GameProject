@@ -1,22 +1,36 @@
 #include "ScenceGameBegin.h"
-namespace { const RECT Start{160, 830, 800, 940}; const RECT Exit{160, 970, 800, 1080}; }
+
+namespace
+{
+const RECT Start{160, 830, 800, 940};
+const RECT Exit{160, 970, 800, 1080};
+} // namespace
+
 int ScenceGameBegin::Init()
 {
     m_background = g2_TextureLoad("resource/background/bg_corridor.png");
     return m_background < 0 ? -1 : 0;
 }
+
 int ScenceGameBegin::Destroy()
 {
-    if (m_background >= 0) g2_TextureRelease(m_background);
+    if (m_background >= 0)
+        g2_TextureRelease(m_background);
     m_background = -1;
     return 0;
 }
-bool ScenceGameBegin::Update(const GameUI& ui)
+
+bool ScenceGameBegin::Update(const GameUI &ui)
 {
-    if (ui.Clicked(Exit) || ui.Pressed(VK_ESCAPE)) PostMessage(g2_GetHwnd(), WM_CLOSE, 0, 0);
-    return ui.Advance() || ui.Clicked(Start);
+    if (ui.Clicked(Exit) || ui.Pressed(VK_ESCAPE))
+        PostMessage(g2_GetHwnd(), WM_CLOSE, 0, 0);
+    bool start = ui.Advance() || ui.Clicked(Start);
+    if (start)
+        ui.PlaySelect();
+    return start;
 }
-void ScenceGameBegin::Render(const GameUI& ui)
+
+void ScenceGameBegin::Render(const GameUI &ui)
 {
     ui.Image(m_background, 0, 0, 1920, 1440);
     ui.Panel({0, 0, 1920, 1440}, 0x6607101A);

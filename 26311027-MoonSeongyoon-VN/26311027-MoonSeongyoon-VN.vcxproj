@@ -131,9 +131,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ScenceGameBegin.cpp" />
     <ClCompile Include="ScenceGamePlay.cpp" />
+    <ClCompile Include="StoryData.cpp" />
+    <ClCompile Include="StoryProgress.cpp" />
     <ClCompile Include="ScenceGameResult.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".clang-format" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -142,14 +145,27 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScenceGameBegin.h" />
     <ClInclude Include="ScenceGamePlay.h" />
+    <ClInclude Include="StoryData.h" />
+    <ClInclude Include="StoryProgress.h" />
     <ClInclude Include="ScenceGameResult.h" />
   </ItemGroup>
   <ItemDefinitionGroup>
-    <ClCompile><LanguageStandard>stdcpp17</LanguageStandard></ClCompile>
+    <ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
   </ItemDefinitionGroup>
-  <ItemGroup><GameResource Include="resource\**\*.png" /></ItemGroup>
+  <ItemGroup>
+    <GameResource Include="resource\**\*.png" />
+    <GameResource Include="resource\**\*.ttf" />
+    <SoundResource Include="resource\sound\Iwan Gabovitch - Dark Ambience Loop.mp3"><OutputName>bgm_battle</OutputName></SoundResource>
+    <SoundResource Include="resource\sound\Sayuri Loop1_01.mp3"><OutputName>bgm_story</OutputName></SoundResource>
+    <SoundResource Include="resource\sound\click4.mp3"><OutputName>se_select</OutputName></SoundResource>
+    <SoundResource Include="resource\sound\qubodupPunch01.mp3"><OutputName>se_attack</OutputName></SoundResource>
+    <SoundResource Include="resource\sound\Replenish.mp3"><OutputName>se_heal</OutputName></SoundResource>
+  </ItemGroup>
   <Target Name="CopyGameResources" AfterTargets="Build">
     <Copy SourceFiles="@(GameResource)" DestinationFiles="@(GameResource->'$(OutDir)resource\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(SoundResource)" DestinationFiles="@(SoundResource->'$(OutDir)resource\sound\%(OutputName)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
