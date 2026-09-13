@@ -1,6 +1,7 @@
 #pragma once
 #include "GameUI.h"
 #include "Player.h"
+#include "StoryProgress.h"
 
 class ScenceGamePlay
 {
@@ -10,18 +11,13 @@ class ScenceGamePlay
     bool Update(const GameUI &ui, Player &player);
     void Render(const GameUI &ui, const Player &player);
     int Destroy();
+    const StoryProgress& GetProgress() const { return m_story; }
 
   private:
-    enum class Stage
-    {
-        Dialogue,
-        Choice,
-        Response,
-        Complete
-    };
-    Stage m_stage = Stage::Dialogue;
-    int m_line = 0;
-    int m_choice = 0;
+    StoryProgress m_story;
+    int m_choiceFocus = 0;
     int m_background = -1;
+    int m_classroom = -1;
     int m_character = -1;
+    int m_shadow = -1;
 };
