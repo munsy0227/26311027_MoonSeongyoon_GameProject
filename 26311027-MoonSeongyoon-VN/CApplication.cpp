@@ -1,56 +1,64 @@
 #include "CApplication.h"
-#include <glc2d.h>
-#include <cstdio>
+#include <algorithm>
 
 extern CApplication g_app;
-
-int AppUpdate()
-{
-    return g_app.Update();
-}
-
-int AppRender()
-{
-    return g_app.Render();
-}
+int AppUpdate() { return g_app.Update(); }
+int AppRender() { return g_app.Render(); }
 
 int CApplication::Init()
 {
     m_player.Init();
-    InitSdk();
-    m_sceneBegin.Init();
+    int sdk = g2_InitSdk();
+    if (sdk < 0) return -1;
+    g2_SetFrameMove(AppUpdate);
+    g2_SetRender(AppRender);
+    g2_SetClearColor(0xFF101722);
+    // Keep the planned 4:3 layout on smaller desktop displays.
+    RECT work{};
+    SystemParametersInfo(SPI_GETWORKAREA, 0, &work, 0);
+    int height = (std::min)(900, int(work.bottom - work.top - 100));
+    height = (std::max)(360, height);
+    int width = height * 4 / 3;
+    if (g2_CreateWin(work.left + 30, work.top + 30, width, height,
+        "The Last Clue - Week 03", true) < 0) return -1;
+    g2_SetStateShow(false);
+    if (m_ui.Init() < 0 || m_sceneBegin.Init() < 0 || m_scenePlay.Init() < 0)
+    {
+        MessageBoxW(g2_GetHwnd(), L"게임 리소스를 불러오지 못했습니다. 실행 파일 옆 resource 폴더를 확인하세요.",
+            L"리소스 오류", MB_OK | MB_ICONERROR);
+        return -1;
+    }
     return 0;
 }
 
 int CApplication::Update()
 {
-    printf("Update.......................\n\n");
-    m_sceneBegin.Update();
+    m_ui.Update();
+    if (m_scene == Scene::Begin)
+    {
+        if (m_sceneBegin.Update(m_ui))
+        {
+            m_player.Init();
+            m_scenePlay.Reset();
+            m_scene = Scene::Play;
+        }
+    }
+    else if (m_scenePlay.Update(m_ui, m_player)) m_scene = Scene::Begin;
     return 0;
 }
 
 int CApplication::Render()
 {
-    printf("Render.......................\n\n");
-    m_sceneBegin.Render();
+    if (m_scene == Scene::Begin) m_sceneBegin.Render(m_ui);
+    else m_scenePlay.Render(m_ui, m_player);
     return 0;
 }
 
 int CApplication::Destroy()
 {
+    m_scenePlay.Destroy();
     m_sceneBegin.Destroy();
+    m_ui.Destroy();
     g2_DestroyWin();
-    return 0;
-}
-
-int CApplication::InitSdk()
-{
-    g2_InitSdk();
-    printf("InitSdk.......................\n\n");
-    g2_SetClearColor(0xFF336699);
-    g2_SetFrameMove(AppUpdate);
-    g2_SetRender(AppRender);
-    g2_CreateWin(m_winPos.x, m_winPos.y,
-        m_winSize.cx, m_winSize.cy, m_winName.c_str());
     return 0;
 }

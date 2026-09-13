@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CApplication.cpp" />
+    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ScenceGameBegin.cpp" />
@@ -137,11 +138,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CApplication.h" />
+    <ClInclude Include="GameUI.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScenceGameBegin.h" />
     <ClInclude Include="ScenceGamePlay.h" />
     <ClInclude Include="ScenceGameResult.h" />
   </ItemGroup>
+  <ItemDefinitionGroup>
+    <ClCompile><LanguageStandard>stdcpp17</LanguageStandard></ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup><GameResource Include="resource\**\*.png" /></ItemGroup>
+  <Target Name="CopyGameResources" AfterTargets="Build">
+    <Copy SourceFiles="@(GameResource)" DestinationFiles="@(GameResource->'$(OutDir)resource\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\Microsoft.DXSDK.D3DX.9.29.952.8\build\native\Microsoft.DXSDK.D3DX.targets" Condition="Exists('packages\Microsoft.DXSDK.D3DX.9.29.952.8\build\native\Microsoft.DXSDK.D3DX.targets')" />

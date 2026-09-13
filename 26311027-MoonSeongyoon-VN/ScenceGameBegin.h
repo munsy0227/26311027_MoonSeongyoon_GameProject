@@ -1,16 +1,12 @@
 #pragma once
-
+#include "GameUI.h"
 class ScenceGameBegin
 {
 public:
     int Init();
-    int Update();
-    int Render();
+    bool Update(const GameUI& ui);
+    void Render(const GameUI& ui);
     int Destroy();
-
-protected:
-    // game textures
-    int m_txGameStart = -1;
-    int m_txLena = -1;
-    int m_txMario = -1;
+private:
+    int m_background = -1;
 };

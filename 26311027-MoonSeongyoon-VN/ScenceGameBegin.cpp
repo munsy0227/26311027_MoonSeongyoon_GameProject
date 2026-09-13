@@ -1,40 +1,31 @@
 #include "ScenceGameBegin.h"
-#include <glc2d.h>
-
+namespace { const RECT Start{160, 830, 800, 940}; const RECT Exit{160, 970, 800, 1080}; }
 int ScenceGameBegin::Init()
 {
-    m_txGameStart = g2_TextureLoad("Texture/GameStart.png");
-    m_txLena = g2_TextureLoad("Texture/lena.png");
-    m_txMario = g2_TextureLoad("resource/character/mario.png");
-    return 0;
+    m_background = g2_TextureLoad("resource/background/bg_corridor.png");
+    return m_background < 0 ? -1 : 0;
 }
-
 int ScenceGameBegin::Destroy()
 {
-    g2_TextureRelease(m_txGameStart);
-    g2_TextureRelease(m_txLena);
-    g2_TextureRelease(m_txMario);
+    if (m_background >= 0) g2_TextureRelease(m_background);
+    m_background = -1;
     return 0;
 }
-
-int ScenceGameBegin::Update()
+bool ScenceGameBegin::Update(const GameUI& ui)
 {
-    return 0;
+    if (ui.Clicked(Exit) || ui.Pressed(VK_ESCAPE)) PostMessage(g2_GetHwnd(), WM_CLOSE, 0, 0);
+    return ui.Advance() || ui.Clicked(Start);
 }
-
-int ScenceGameBegin::Render()
+void ScenceGameBegin::Render(const GameUI& ui)
 {
-    VEC2 pos1(0, 0);
-    VEC2 pos2(0, 200);
-    VEC2 pos3(300, 200);
-
-    g2_Draw2D(m_txGameStart, {}, &pos1);
-    g2_Draw2D(m_txLena, {}, &pos2);
-    g2_Draw2D(m_txMario, {}, &pos3);
-
-    RECT rc{ 10, 10, 768, 768 };
-    g2_FontCreate("Arial", 32);
-    auto text = "안녕하세요.";
-    g2_FontDrawText(-1, rc, 0, text);
-    return 0;
+    ui.Image(m_background, 0, 0, 1920, 1440);
+    ui.Panel({0, 0, 1920, 1440}, 0x6607101A);
+    ui.Panel({100, 250, 1000, 1170}, 0xBF101923);
+    ui.Text("THE LAST CLUE", {160, 320, 960, 400}, 0, 0xFFD4BB86);
+    ui.Text("마지막 단서", {150, 420, 1100, 590}, 2);
+    ui.Text("사흘째, 폐교에서 내 이름을 부르는 목소리.", {160, 640, 1100, 715});
+    ui.Text("그 목소리의 주인을 만나러 간다.", {160, 710, 1100, 785});
+    ui.Button("이야기 시작   [Enter]", Start);
+    ui.Button("게임 종료   [Esc]", Exit);
+    ui.Text("문성윤  |  26311027", {160, 1280, 900, 1340}, 0);
 }
