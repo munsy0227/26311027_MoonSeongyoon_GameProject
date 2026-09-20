@@ -128,6 +128,7 @@
     <ClCompile Include="CApplication.cpp" />
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="BattleProgress.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ScenceGameBegin.cpp" />
     <ClCompile Include="ScenceGamePlay.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="CApplication.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="BattleProgress.h" />
     <ClInclude Include="ScenceGameBegin.h" />
     <ClInclude Include="ScenceGamePlay.h" />
     <ClInclude Include="StoryData.h" />

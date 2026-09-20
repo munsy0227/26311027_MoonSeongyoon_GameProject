@@ -24,5 +24,7 @@ class CApplication
     GameUI m_ui;
     Player m_player;
     int m_storyMusic = -1;
+    int m_battleMusic = -1;
+    bool m_playingBattleMusic = false;
     bool m_fontLoaded = false;
 };

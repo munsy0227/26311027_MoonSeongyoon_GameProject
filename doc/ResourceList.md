@@ -1,6 +1,6 @@
-﻿# 리소스 목록
+# 리소스 목록
 
-게임에 필요한 이미지·사운드의 규격과 용도이다. 아래 3주차 준비 현황이 현재 실제 파일 기준이며, 기존 계획 및 화면 설계 PNG와 구분한다.
+게임에 필요한 이미지·사운드의 규격과 용도이다. 아래 리소스 목록과 4주차 연결 현황이 현재 실제 파일 기준이며, 기존 계획 및 화면 설계 PNG와 구분한다.
 
 ## 이미지 계획
 
@@ -62,12 +62,12 @@
 | 원본 파일 (resource/sound/) | 실행 파일명 | 제작자·출처 | 사용 조건 및 현재 용도 |
 | --- | --- | --- | --- |
 | `Sayuri Loop1_01.mp3` | `bgm_story.mp3` | Crow Shade, [Loops - Lonely Nightmare](https://crowshade.itch.io/melancholic-indie-horror-game-soundtrack-pack) | CC BY 4.0. 상업·비상업 사용과 편집이 가능하며 `Music by Crow Shade` 크레딧을 유지한다. 메인 BGM으로 시작·대화 화면에서 반복 재생한다. |
-| `Iwan Gabovitch - Dark Ambience Loop.mp3` | `bgm_battle.mp3` | Iwan Gabovitch, [OpenGameArt - Dark Ambience Loop](https://opengameart.org/content/dark-ambience-loop) | CC BY 3.0. `Dark Ambience Loop by Iwan Gabovitch qubodup.net` 또는 원본 링크를 크레딧에 남긴다. 전투 BGM으로 등록했으며 전투 장면 연결 전 준비 상태다. |
-| `qubodupPunch01.mp3` | `se_attack.mp3` | Iwan Gabovitch(qubodup), [OpenGameArt - Punch](https://opengameart.org/content/punch) | CC0. 별도 표시 의무는 없지만 제작자·원본 링크를 함께 기록한다. 공격 효과음으로 등록했으며 공격 기능 연결 전 준비 상태다. |
-| `Replenish.mp3` | `se_heal.mp3` | Iwan Gabovitch(qubodup), [OpenGameArt - Replenish Life Force Sound](https://opengameart.org/content/replenish-life-force-sound) | CC BY 3.0. `Replenish Life Force Copyright 2013 Iwan Gabovitch http://freesound.org/people/qubodup/ , CC-BY3 license.` 문구를 크레딧에 남긴다. 회복 효과음으로 등록했으며 회복 기능 연결 전 준비 상태다. |
+| `Iwan Gabovitch - Dark Ambience Loop.mp3` | `bgm_battle.mp3` | Iwan Gabovitch, [OpenGameArt - Dark Ambience Loop](https://opengameart.org/content/dark-ambience-loop) | CC BY 3.0. `Dark Ambience Loop by Iwan Gabovitch qubodup.net` 또는 원본 링크를 크레딧에 남긴다. 4주차 전투 진입·종료 시 BGM 전환을 연결했다. |
+| `qubodupPunch01.mp3` | `se_attack.mp3` | Iwan Gabovitch(qubodup), [OpenGameArt - Punch](https://opengameart.org/content/punch) | CC0. 별도 표시 의무는 없지만 제작자·원본 링크를 함께 기록한다. 4주차 공격·단서 활용·적 피해 효과음으로 연결했다. |
+| `Replenish.mp3` | `se_heal.mp3` | Iwan Gabovitch(qubodup), [OpenGameArt - Replenish Life Force Sound](https://opengameart.org/content/replenish-life-force-sound) | CC BY 3.0. `Replenish Life Force Copyright 2013 Iwan Gabovitch http://freesound.org/people/qubodup/ , CC-BY3 license.` 문구를 크레딧에 남긴다. 4주차 회복 아이템 사용 효과음으로 연결했다. |
 | `click4.mp3` | `se_select.mp3` | Kenney, [Kenney UI Audio](https://kenney.nl/assets/ui-audio) | CC0. 별도 표시 의무는 없지만 제작자·원본 링크를 함께 기록한다. 시작·대사 진행·선택 확정·타이틀 복귀 효과음으로 현재 연결되어 있다. |
 
-glc2d 0.1.0.7의 MP3 지원을 사용하므로 WAV 변환은 하지 않는다. 효과음은 이전 재생을 멈춘 뒤 다시 재생해 연속 입력에 대응하고, 배경음은 타이틀과 대화 사이에서 끊지 않는다. 전투·공격·회복 음원은 프로젝트에 등록했으며 현재 구현 구간에서는 기능 연결 전 준비 상태다.
+glc2d 0.1.0.7의 MP3 지원을 사용하므로 WAV 변환은 하지 않는다. 효과음은 이전 재생을 멈춘 뒤 다시 재생해 연속 입력에 대응하고, 배경음은 타이틀과 대화 사이에서 끊지 않는다. 4주차에는 전투·공격·회복 기능에 음원을 연결했다. 실제 음원 청취 검증은 별도로 남아 있다.
 
 ### 적용 폰트
 
