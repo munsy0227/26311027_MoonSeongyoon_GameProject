@@ -115,7 +115,7 @@ bool ScenceGamePlay::Update(const GameUI& ui, Player& player)
         ui.PlaySelect();
         m_story.Advance(player);
         if (m_story.IsComplete())
-            m_battle.Start(m_story.ClueCount());
+            m_battle.Start(m_story.HasPhoto(), m_story.HasRecord());
         m_choiceFocus = 0;
     }
     return false;

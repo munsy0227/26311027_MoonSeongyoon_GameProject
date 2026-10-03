@@ -10,6 +10,8 @@ class StoryProgress
   public:
     void Reset();
     bool Advance(Player& player);
+    void BeginEnding(bool victory, Player& player);
+    EndingKind Ending() const { return m_ending; }
     bool Choose(int option, Player& player);
     const StorySection& Section() const;
     const StoryLine& Line() const;
@@ -26,6 +28,7 @@ class StoryProgress
     bool Matches(StoryCondition condition) const;
     void Apply(StoryEvent event, Player& player);
 
+    EndingKind m_ending = EndingKind::None;
     StoryBlock m_block = StoryBlock::Prologue;
     std::size_t m_line = 0;
     bool m_choosing = false;
@@ -35,4 +38,3 @@ class StoryProgress
     bool m_hasRecord = false;
     std::uint32_t m_appliedEvents = 0;
 };
-

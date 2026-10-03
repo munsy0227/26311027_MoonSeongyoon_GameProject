@@ -2,6 +2,7 @@
 
 void StoryProgress::Reset()
 {
+    m_ending = EndingKind::None;
     m_block = StoryBlock::Prologue;
     m_line = 0;
     m_choosing = m_complete = false;
@@ -75,6 +76,12 @@ void StoryProgress::FindVisibleLine(Player& player)
     m_line = Section().lines.size() - 1;
     if (Section().choice != StoryChoice::None)
         m_choosing = true;
+    else if (m_block == StoryBlock::AfterBattle)
+    {
+        const StoryBlock ending = m_ending == EndingKind::Good ? StoryBlock::GoodEnding :
+            m_ending == EndingKind::Normal ? StoryBlock::NormalEnding : StoryBlock::MissingCluesEnding;
+        Enter(ending, player);
+    }
     else if (Section().next == StoryBlock::Count)
         m_complete = true;
     else
@@ -105,4 +112,15 @@ bool StoryProgress::Choose(int option, Player& player)
     }
     Enter(Section().branches[option], player);
     return true;
+}
+
+void StoryProgress::BeginEnding(bool victory, Player& player)
+{
+    if (m_ending != EndingKind::None)
+        return;
+    m_ending = !victory || player.GetLife() == 0 ? EndingKind::LifeLost :
+        ClueCount() < 2 ? EndingKind::MissingClues :
+        player.GetScore() >= 100 ? EndingKind::Good : EndingKind::Normal;
+    m_complete = false;
+    Enter(m_ending == EndingKind::LifeLost ? StoryBlock::LifeLostEnding : StoryBlock::AfterBattle, player);
 }

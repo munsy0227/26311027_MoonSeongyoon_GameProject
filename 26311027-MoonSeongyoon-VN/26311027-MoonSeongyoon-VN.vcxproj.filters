@@ -66,5 +66,9 @@
   <ItemGroup>
     <ClCompile Include="BattleProgress.cpp"><Filter>소스 파일</Filter></ClCompile>
     <ClInclude Include="BattleProgress.h"><Filter>헤더 파일</Filter></ClInclude>
+    <ClCompile Include="StoryData.cpp"><Filter>소스 파일</Filter></ClCompile>
+    <ClInclude Include="StoryData.h"><Filter>헤더 파일</Filter></ClInclude>
+    <ClCompile Include="StoryProgress.cpp"><Filter>소스 파일</Filter></ClCompile>
+    <ClInclude Include="StoryProgress.h"><Filter>헤더 파일</Filter></ClInclude>
   </ItemGroup>
 </Project>

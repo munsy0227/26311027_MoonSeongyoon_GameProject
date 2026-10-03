@@ -6,7 +6,7 @@ enum class StoryBlock
     Prologue, Meeting, TrustA, TrustB, Locker, OpenLocker, SkipLocker,
     Warning, Floor, SafeFloor, RiskyFloor, ClassroomEntrance,
     Classroom, ReadRecord, LeaveRecord, Truth, SupportA, SupportB,
-    Confrontation, Count
+    Confrontation, AfterBattle, GoodEnding, NormalEnding, MissingCluesEnding, LifeLostEnding, Count
 };
 
 enum class StoryVisual { Empty, Seoyeon, Both };
@@ -41,3 +41,8 @@ struct StorySection
 
 const StorySection& GetStorySection(StoryBlock block);
 
+
+
+enum class EndingKind { None, Good, Normal, MissingClues, LifeLost };
+enum class BattleDialogue { Opening, Attack, Defend, Heal, Photo, Record, BothClues, NormalForecast, StrongForecast, NormalHit, StrongHit, BlockedHit, LowHP, ClueRelation, WeakEnemy, Retry, Victory, Count };
+const std::vector<StoryLine>& GetBattleDialogue(BattleDialogue dialogue);

@@ -1,10 +1,22 @@
 #include "BattleProgress.h"
 #include <algorithm>
 #include <cstdio>
+#include <cstring>
 
-void BattleProgress::Reset()
+void BattleProgress::Reset() { *this = BattleProgress{}; }
+
+void BattleProgress::BeginLines(Phase phase)
 {
-    *this = BattleProgress{};
+    m_phase = phase;
+    m_lines.clear();
+    m_page = 0;
+}
+
+void BattleProgress::Append(BattleDialogue dialogue, const char* replaceId, const char* replacement)
+{
+    for (const auto& line : GetBattleDialogue(dialogue))
+        m_lines.push_back({line.speaker,
+            replaceId && std::strcmp(line.id, replaceId) == 0 ? replacement : line.text, line.visual});
 }
 
 void BattleProgress::ResetAttempt()
@@ -13,29 +25,45 @@ void BattleProgress::ResetAttempt()
     m_potions = 1;
     m_turn = 1;
     m_strong = m_defending = m_clueUsed = false;
+    m_lowHPShown = m_clueShown = m_weakEnemyShown = false;
     m_sound = Sound::None;
-    m_phase = Phase::Choosing;
-    m_message = "그림자의 행동 예고를 보고 명령을 선택하세요.";
+    BeginLines(Phase::Opening);
+    Append(BattleDialogue::Opening);
 }
 
-void BattleProgress::Start(int clues)
+void BattleProgress::Start(bool photo, bool record)
 {
-    if (IsActive())
-        return;
-    m_clues = clues;
+    if (IsActive()) return;
+    m_photo = photo;
+    m_record = record;
     ResetAttempt();
+}
+
+const char* BattleProgress::Speaker() const
+{
+    return m_phase == Phase::Choosing || m_lines.empty() ? "시스템" : m_lines[m_page].speaker.c_str();
+}
+
+const char* BattleProgress::Message() const
+{
+    return m_phase == Phase::Choosing || m_lines.empty() ?
+        "그림자의 행동 예고를 보고 명령을 선택하세요." : m_lines[m_page].text.c_str();
+}
+
+StoryVisual BattleProgress::Visual() const
+{
+    return m_phase == Phase::Choosing || m_lines.empty() ? StoryVisual::Both : m_lines[m_page].visual;
 }
 
 bool BattleProgress::CanUse(Command command, const Player& player) const
 {
-    if (m_phase != Phase::Choosing || player.GetHP() == 0 || player.GetLife() == 0)
-        return false;
+    if (m_phase != Phase::Choosing || player.GetHP() == 0 || player.GetLife() == 0) return false;
     switch (command)
     {
     case Command::Attack:
     case Command::Defend: return true;
     case Command::Heal: return m_potions > 0 && player.GetHP() < 100;
-    case Command::Clue: return m_clues > 0 && !m_clueUsed;
+    case Command::Clue: return (m_photo || m_record) && !m_clueUsed;
     default: return false;
     }
 }
@@ -43,94 +71,132 @@ bool BattleProgress::CanUse(Command command, const Player& player) const
 bool BattleProgress::Choose(Command command, Player& player)
 {
     m_sound = Sound::None;
-    if (!CanUse(command, player))
-        return false;
+    if (!CanUse(command, player)) return false;
+    BeginLines(Phase::PlayerResult);
     char message[256];
     switch (command)
     {
     case Command::Attack:
-    case Command::Clue:
     {
-        const int damage = (std::min)(m_enemyHP, command == Command::Clue ? 40 : 20);
+        const int damage = (std::min)(m_enemyHP, 20);
         m_enemyHP -= damage;
-        if (command == Command::Clue)
-            m_clueUsed = true;
-        sprintf_s(message, "%s 적 HP -%d.", command == Command::Clue ?
-            "단서가 그림자의 주장을 무너뜨렸다." : "공격이 적중했다.", damage);
-        m_message = message;
+        sprintf_s(message, "공격이 적중했다. 적 HP -%d.", damage);
+        Append(BattleDialogue::Attack, "B05:1", message);
         m_sound = Sound::Attack;
         break;
     }
     case Command::Defend:
         m_defending = true;
-        m_message = "방어 자세를 잡았다. 이번 적 공격 피해를 10으로 줄인다.";
+        Append(BattleDialogue::Defend);
         break;
     case Command::Heal:
     {
         const int before = player.GetHP();
         player.Heal(30);
         --m_potions;
-        sprintf_s(message, "회복 아이템을 사용했다. HP +%d. 남은 회복약 %d개.",
-            player.GetHP() - before, m_potions);
-        m_message = message;
+        sprintf_s(message, "회복 아이템을 사용했다. HP +%d. 남은 회복약 %d개.", player.GetHP() - before, m_potions);
+        Append(BattleDialogue::Heal, "B09:1", message);
         m_sound = Sound::Heal;
         break;
     }
+    case Command::Clue:
+    {
+        const int damage = (std::min)(m_enemyHP, 40);
+        m_enemyHP -= damage;
+        m_clueUsed = true;
+        const bool both = m_photo && m_record;
+        sprintf_s(message, "%s 적 HP -%d.", both ? "두 단서가 같은 사건을 증명한다." :
+            m_photo ? "사진 속 행동이 그림자의 주장과 충돌한다." : "사고 기록이 그림자의 주장과 충돌한다.", damage);
+        Append(both ? BattleDialogue::BothClues : m_photo ? BattleDialogue::Photo : BattleDialogue::Record,
+            both ? "B14C:1" : m_photo ? "B14A:1" : "B14B:1", message);
+        m_sound = Sound::Attack;
+        break;
     }
-    m_phase = Phase::PlayerResult;
+    }
+    if (m_enemyHP == 0)
+    {
+        // Commit the win once, before any further input or enemy retaliation.
+        player.AddScore(20);
+        m_phase = Phase::Victory;
+        Append(BattleDialogue::Victory);
+    }
     return true;
+}
+
+void BattleProgress::NextTurn()
+{
+    m_strong = !m_strong;
+    ++m_turn;
+    BeginLines(Phase::Forecast);
+    Append(m_strong ? BattleDialogue::StrongForecast : BattleDialogue::NormalForecast);
+}
+
+void BattleProgress::Relations(const Player& player)
+{
+    BeginLines(Phase::Interlude);
+    if (player.GetHP() <= 50 && !m_lowHPShown)
+    {
+        m_lowHPShown = true;
+        Append(BattleDialogue::LowHP);
+    }
+    if (m_clueUsed && !m_clueShown)
+    {
+        m_clueShown = true;
+        Append(BattleDialogue::ClueRelation);
+    }
+    if (m_enemyHP <= 40 && !m_weakEnemyShown)
+    {
+        m_weakEnemyShown = true;
+        Append(BattleDialogue::WeakEnemy);
+    }
+    if (m_lines.empty()) NextTurn();
 }
 
 bool BattleProgress::Advance(Player& player)
 {
     m_sound = Sound::None;
-    if (m_phase == Phase::PlayerResult)
+    if (m_phase == Phase::Inactive || m_phase == Phase::Choosing || IsFinished()) return false;
+    if (m_page + 1 < m_lines.size())
     {
-        if (m_enemyHP == 0)
-        {
-            player.AddScore(20);
-            m_phase = Phase::Won;
-            m_message = "그림자가 흩어졌다. 전투 승리 +20점.\n4주차 전투 구현 구간을 완료했습니다.";
-        }
-        else
-        {
-            const int damage = (std::min)(player.GetHP(), m_defending ? 10 : ExpectedDamage());
-            player.TakeDamage(damage);
-            char message[256];
-            sprintf_s(message, "%s HP -%d.", m_defending ? "방어로 충격을 줄였다." :
-                (m_strong ? "강한 충격을 받았다." : "그림자의 공격을 받았다."), damage);
-            m_message = message;
-            m_defending = false;
-            m_phase = Phase::EnemyResult;
-            m_sound = Sound::Attack;
-        }
+        ++m_page;
         return true;
     }
-    if (m_phase == Phase::EnemyResult)
+    switch (m_phase)
     {
+    case Phase::Opening:
+    case Phase::Forecast: m_phase = Phase::Choosing; break;
+    case Phase::PlayerResult:
+    {
+        const bool defending = m_defending;
+        const int damage = (std::min)(player.GetHP(), defending ? 10 : ExpectedDamage());
+        player.TakeDamage(damage);
+        m_defending = false;
+        BeginLines(Phase::EnemyResult);
+        char message[256];
+        sprintf_s(message, "%s HP -%d.", defending ? "방어로 충격을 줄였다." :
+            m_strong ? "강한 충격을 받았다." : "그림자의 공격을 받았다.", damage);
+        Append(defending ? BattleDialogue::BlockedHit : m_strong ? BattleDialogue::StrongHit : BattleDialogue::NormalHit,
+            defending ? "B21:1" : m_strong ? "B20:1" : "B19:1", message);
+        m_sound = Sound::Attack;
+        break;
+    }
+    case Phase::EnemyResult:
+        // Resolve death before optional relationship dialogue or the next turn.
         if (player.GetHP() == 0)
         {
-            m_phase = player.GetLife() > 0 ? Phase::Retry : Phase::Lost;
-            m_message = player.GetLife() > 0 ?
-                "HP가 0이 되었다. Life -1.\n다음을 누르면 HP 100과 전투 시작 상태로 재도전합니다." :
-                "HP가 0이 되었다. 마지막 Life를 소진했다.\n조사를 계속할 수 없다. 타이틀에서 새 게임을 시작하세요.";
+            if (player.GetLife() == 0) m_phase = Phase::Lost;
+            else
+            {
+                BeginLines(Phase::Retry);
+                Append(BattleDialogue::Retry);
+            }
         }
-        else
-        {
-            m_strong = !m_strong;
-            ++m_turn;
-            m_phase = Phase::Choosing;
-            m_message = "그림자의 행동 예고를 보고 명령을 선택하세요.";
-        }
-        return true;
+        else Relations(player);
+        break;
+    case Phase::Interlude: NextTurn(); break;
+    case Phase::Retry: player.Retry(); ResetAttempt(); break;
+    case Phase::Victory: m_phase = Phase::Won; break;
+    default: return false;
     }
-    if (m_phase == Phase::Retry)
-    {
-        player.Retry();
-        // Score and clues never change in a failed attempt. Restore the single
-        // starting potion; life is deliberately kept at its reduced value.
-        ResetAttempt();
-        return true;
-    }
-    return false;
+    return true;
 }
