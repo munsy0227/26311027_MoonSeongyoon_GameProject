@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "ScenceGameBegin.h"
 #include "ScenceGamePlay.h"
+#include "ScenceGameResult.h"
 
 class CApplication
 {
@@ -16,8 +17,11 @@ class CApplication
     enum class Scene
     {
         Begin,
-        Play
+        Play,
+        Result
     };
+    void StartGame();
+    ScenceGameResult m_sceneResult;
     Scene m_scene = Scene::Begin;
     ScenceGameBegin m_sceneBegin;
     ScenceGamePlay m_scenePlay;
